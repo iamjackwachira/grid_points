@@ -1,7 +1,3 @@
-import logging
-from datetime import timedelta
-
-
 from .base import *  # noqa
 from .base import env
 
