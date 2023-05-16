@@ -1,7 +1,14 @@
+import logging
 import math
 
+from django.db import transaction
 
-def find_closest_points(points: str) -> str:
+from grid_points.core.models import GridPoint
+
+logger = logging.getLogger(__name__)
+
+
+def _find_closest_points(points: str) -> str:
     """Calculates the points that are closest to each other and returns it
 
     Args:
@@ -44,3 +51,18 @@ def find_closest_points(points: str) -> str:
         point_set.add(point1)
 
     return ";".join(closest_points)
+
+
+@transaction.atomic
+def find_closest_points(received_points: str) -> str:
+    try:
+        closest_points = _find_closest_points(received_points)
+    except ValueError as e:
+        logger.error(e)
+    except Exception as e:
+        logger.error(e)
+
+    GridPoint.objects.create(
+        received_points=received_points, closest_points=closest_points
+    )
+    return closest_points

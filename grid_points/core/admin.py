@@ -5,6 +5,7 @@ from . import models
 
 class GridPointAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "created_on",
         "received_points",
         "closest_points",
