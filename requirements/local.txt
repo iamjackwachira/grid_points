@@ -1,4 +1,20 @@
 -r base.txt
 
 psycopg2==2.9.6  # https://github.com/psycopg/psycopg2
+
+# Testing
+# ------------------------------------------------------------------------------
+pytest==6.2.4  # https://github.com/pytest-dev/pytest
+pytest-django==4.4.0 # https://github.com/pytest-dev/pytest-django
+factory-boy==3.2.0 # https://github.com/FactoryBoy/factory_boy
+django-coverage-plugin==3.0.0  # https://github.com/nedbat/django_coverage_plugin
+
+# Code quality
+# ------------------------------------------------------------------------------
+flake8==6.0.0  # https://github.com/PyCQA/flake8
+flake8-isort==6.0.0  # https://github.com/gforcada/flake8-isort
+coverage==7.2.5  # https://github.com/nedbat/coveragepy
+black==23.3.0  # https://github.com/psf/black
 pre-commit==3.3.1  # https://github.com/pre-commit/pre-commit
+django-stubs==4.2.0 # https://github.com/typeddjango/django-stubs
+mypy==1.3.0  # https://github.com/python/mypy

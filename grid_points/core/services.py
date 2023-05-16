@@ -10,17 +10,37 @@ def find_closest_points(points: str) -> str:
     Returns:
         str: String of semicolon separated coordinates
     """
-    points_list = points.split(";")
-    closest_points = ("", "")
+
+    point_list = points.split(";")
+
+    # Return an empty string if there's only one point or no point to compare
+    if len(point_list) < 2:
+        return ""
+
+    closest_points = [""] * 2
     min_distance = float("inf")
-    for i, point1 in enumerate(points_list[:-1]):
+    point_set = set()
+
+    for i, point1 in enumerate(point_list[:-1]):
+        # Skip the calculation between identical points
+        if point1 in point_set:
+            continue
+
         x1, y1 = map(float, point1.split(","))
-        for point2 in points_list[i + 1 :]:
+
+        for point2 in point_list[i + 1 :]:
+            # Skip the calculation between a pair of points already compared with
+            if point2 in point_set:
+                continue
+
             x2, y2 = map(float, point2.split(","))
             # Calculate the Euclidean distance and compare with the minimimum distance so far
             # https://www.cuemath.com/euclidean-distance-formula/
             distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
             if distance < min_distance:
-                closest_points = (point1, point2)
+                closest_points = [point1, point2]
                 min_distance = distance
+
+        point_set.add(point1)
+
     return ";".join(closest_points)
