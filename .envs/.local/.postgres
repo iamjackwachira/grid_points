@@ -1,0 +1,6 @@
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=grid_points
+POSTGRES_USER=root
+POSTGRES_PASSWORD=postgres
+DATABASE_URL=postgres://root:postgres@postgres:5432/grid_points
