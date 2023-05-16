@@ -8,7 +8,7 @@ from grid_points.core.models import GridPoint
 logger = logging.getLogger(__name__)
 
 
-def _find_closest_points(points: str) -> str:
+def calculate_closest_points(points: str) -> str:
     """Calculates the points that are closest to each other and returns it
 
     Args:
@@ -56,7 +56,7 @@ def _find_closest_points(points: str) -> str:
 @transaction.atomic
 def find_closest_points(received_points: str) -> str:
     try:
-        closest_points = _find_closest_points(received_points)
+        closest_points = calculate_closest_points(received_points)
     except ValueError as e:
         logger.error(e)
     except Exception as e:
