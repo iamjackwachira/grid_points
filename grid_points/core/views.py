@@ -5,8 +5,10 @@ from . import serializers, services
 
 
 class GridPointsView(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    serializer_class = serializers.GridPointsSerializer
+
     def create(self, request, *args, **kwargs):
-        serializer = serializers.GridPointsSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         points = serializer.validated_data.get("points")
         closest_points = services.find_closest_points(received_points=points)

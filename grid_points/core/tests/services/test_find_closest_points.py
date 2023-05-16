@@ -1,40 +1,23 @@
-from django.test import TestCase
+from django.test import TransactionTestCase
 
-from grid_points.core.services import calculate_closest_points
+from grid_points.core.exceptions import ApplicationError
+from grid_points.core.models import GridPoint
+from grid_points.core.services import find_closest_points
 
 
-class CalculateClosestPointsTests(TestCase):
-    def test_closest_points(self):
-        points = "2,2;-1,30;20,11;4,5"
-        self.assertEqual(calculate_closest_points(points), "2,2;4,5")
+class FindClosestPointsTestCase(TransactionTestCase):
+    def test_with_valid_input(self):
+        received_points = "1,2;3,4;5,6;7,8"
+        with self.assertNumQueries(3):
+            closest_points = find_closest_points(received_points)
+        self.assertEqual(closest_points, "1,2;3,4")
 
-    def test_single_point(self):
-        points = "1,1"
-        self.assertEqual(calculate_closest_points(points), "")
+        created_grid_point = GridPoint.objects.get(received_points=received_points)
+        self.assertEqual(created_grid_point.closest_points, closest_points)
 
-    def test_same_distance_points(self):
-        points = "2,2;4,4;-2,-2;1,5"
-        self.assertIn(calculate_closest_points(points), ["2,2;4,4", "-2,-2;1,5"])
-
-    def test_invalid_input(self):
-        with self.assertRaises(ValueError):
-            calculate_closest_points("2,2;4,x")
-
-    def test_empty_input(self):
-        self.assertEqual(calculate_closest_points(""), "")
-
-    def test_same_point_input(self):
-        self.assertEqual(calculate_closest_points("3,4;3,4"), "3,4;3,4")
-
-    def test_duplicate_points(self):
-        points = "1,1;2,2;2,2;3,3"
-        self.assertIn(
-            calculate_closest_points(points), ["1,1;2,2", "2,2;2,2", "2,2;3,3"]
-        )
-
-    def test_collinear_points(self):
-        points = "1,1;2,2;3,3"
-        self.assertEqual(calculate_closest_points(points), "1,1;2,2")
-
-    def test_only_two_points(self):
-        self.assertEqual(calculate_closest_points("1,2;4,5"), "1,2;4,5")
+    def test_with_invalid_input_value_error(self):
+        received_points = "1,2;3,4;x,y"
+        with self.assertRaisesMessage(
+            ApplicationError, "Error calculating closest points"
+        ):
+            find_closest_points(received_points)

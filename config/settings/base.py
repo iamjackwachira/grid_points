@@ -79,6 +79,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
+# Rest Framework
+# ------------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER": "grid_points.core.utils.custom_exception_handler",
+}
+
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
